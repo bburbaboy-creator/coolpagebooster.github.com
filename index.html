@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoolPageBooster - Social Link Aggregator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#7c3aed',
+                        online: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+        .social-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .message-user {
+            background: #4f46e5;
+            color: white;
+            border-radius: 18px 18px 0 18px;
+        }
+        .message-ai {
+            background: #f3f4f6;
+            color: #1f2937;
+            border-radius: 18px 18px 18px 0;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+        }
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating-whatsapp i {
+            color: white;
+            font-size: 28px;
+        }
+        .footer-social a:hover {
+            transform: translateY(-3px);
+        }
+        .support-number {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f0fdf4;
+            border-radius: 8px;
+        }
+        .support-number i {
+            color: #047857;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        .support-number a {
+            color: #065f46;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .support-number a:hover {
+            text-decoration: underline;
+        }
+        .online-indicator {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background-color: #10b981;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #10b981;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        .chat-header {
+            background: #4f46e5;
+            color: white;
+            padding: 16px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+        }
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+        }
+        .chat-header .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid white;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        .message-received {
+            background: #f1f1f1;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .message-sent {
+            background: #4f46e5;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input {
+            display: flex;
+            padding: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .chat-input input {
+            flex: 1;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            padding: 8px 16px;
+            outline: none;
+        }
+        .chat-input button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-list {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        .chat-list-header {
+            background: #4f46e5;
+            color: white;
+            padding: 16px;
+            border-radius: 16px 16px 0 0;
+            font-weight: bold;
+        }
+        .chat-list-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+        }
+        .chat-list-item:hover {
+            background: #f9fafb;
+        }
+        .chat-list-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+        }
+        .chat-list-item .online-indicator {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid white;
+        }
+        .chat-list-item .user-info {
+            flex: 1;
+        }
+        .chat-list-item .user-info .username {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .chat-list-item .user-info .last-message {
+            font-size: 14px;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-toggle {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 999;
+        }
+        .unread-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .post-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+        }
+        .post-header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+        }
+        .post-header .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid white;
+        }
+        .post-content {
+            padding: 0 16px;
+        }
+        .post-image {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+        .post-video {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            display: block;
+        }
+        .post-actions {
+            display: flex;
+            padding: 12px 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .post-action {
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        .post-action:hover {
+            color: #4f46e5;
+        }
+        .post-action i {
+            margin-right: 6px;
+        }
+        .post-comments {
+            padding: 0 16px 16px;
+        }
+        .comment {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        .comment img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+        .comment-content {
+            background: #f9fafb;
+            padding: 10px 14px;
+            border-radius: 18px;
+            flex: 1;
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .comment-author {
+            font-weight: bold;
+        }
+        .comment-time {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        .comment-text {
+            font-size: 14px;
+        }
+        .comment-input {
+            display: flex;
+            margin-top: 12px;
+        }
+        .comment-input input {
+            flex: 1;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            padding: 8px 16px;
+            outline: none;
+        }
+        .comment-input button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .language-selector {
+            position: relative;
+        }
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            z-index: 50;
+            display: none;
+        }
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+        .language-option:hover {
+            background: #f9fafb;
+        }
+        .language-option.active {
+            background: #4f46e5;
+            color: white;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        .sidebar-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .sidebar-item:hover {
+            background: #f9fafb;
+        }
+        .sidebar-item.active {
+            background: #4f46e5;
+            color: white;
+        }
+        .sidebar-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 99;
+            background: #4f46e5;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .main-content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+        .main-content.sidebar-open {
+            margin-left: 280px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+            }
+            .main-content.sidebar-open {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="font-bold text-xl">CoolPageBooster</h2>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-item active" data-view="feed">
+                <i class="fas fa-home"></i>
+                <span>Feed</span>
+            </div>
+            <div class="sidebar-item" data-view="profile">
+                <i class="fas fa-user"></i>
+                <span>My Profile</span>
+            </div>
+            <div class="sidebar-item" data-view="explore">
+                <i class="fas fa-compass"></i>
+                <span>Explore</span>
+            </div>
+            <div class="sidebar-item" data-view="notifications">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </div>
+            <div class="sidebar-item" data-view="messages">
+                <i class="fas fa-envelope"></i>
+                <span>Messages</span>
+            </div>
+            <div class="sidebar-item" data-view="saved">
+                <i class="fas fa-bookmark"></i>
+                <span>Saved</span>
+            </div>
+            <div class="sidebar-item" data-view="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <div class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Top Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-globe text-white text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    CoolPageBooster
+                </h1>
+            </div>
+            
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search users or posts..."
+                        class="w-full px-4 py-2 pl-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    >
+                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Language Selector -->
+                <div class="language-selector">
+                    <button class="flex items-center space-x-1 px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-100">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLanguage">English</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option active" data-lang="en">English</div>
+                        <div class="language-option" data-lang="fr">Français</div>
+                        <div class="language-option" data-lang="es">Español</div>
+                        <div class="language-option" data-lang="de">Deutsch</div>
+                        <div class="language-option" data-lang="pt">Português</div>
+                        <div class="language-option" data-lang="ar">العربية</div>
+                        <div class="language-option" data-lang="zh">中文</div>
+                        <div class="language-option" data-lang="ja">日本語</div>
+                        <div class="language-option" data-lang="ko">한국어</div>
+                        <div class="language-option" data-lang="hi">हिन्दी</div>
+                    </div>
+                </div>
+                
+                <button id="aiButton" class="relative p-2 rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-colors">
+                    <i class="fas fa-comment-dots text-xl"></i>
+                    <span id="aiBadge" class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full hidden"></span>
+                </button>
+                
+                <div class="flex items-center space-x-2 cursor-pointer" id="profileTrigger">
+                    <img src="https://placehold.co/100x100/4f46e5/white?text=JD" alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-indigo-300">
+                    <span class="font-medium text-gray-700 hidden md:inline">john_doe</span>
+                </div>
+                
+                <button id="settingsButton" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-cog text-gray-600 text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 main-content" id="mainContent">
+        <!-- Feed View -->
+        <div id="feedView" class="max-w-2xl mx-auto">
+            <!-- Create Post -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <div class="flex items-center space-x-4 mb-4">
+                    <img src="https://placehold.co/100x100/4f46e5/white?text=JD" alt="Profile" class="w-12 h-12 rounded-full object-cover">
+                    <button class="flex-1 bg-gray-100 text-gray-700 rounded-full px-4 py-2 text-left">What's on your mind?</button>
+                </div>
+                <div class="flex justify-between">
+                    <button class="flex flex-col items-center text-gray-600 hover:text-indigo-600">
+                        <i class="fas fa-video text-xl mb-1"></i>
+                        <span>Live Video</span>
+                    </button>
+                    <button class="flex flex-col items-center text-gray-600 hover:text-indigo-600">
+                        <i class="fas fa-image text-xl mb-1"></i>
+                        <span>Photo/Video</span>
+                    </button>
+                    <button class="flex flex-col items-center text-gray-600 hover:text-indigo-600">
+                        <i class="fas fa-smile text-xl mb-1"></i>
+                        <span>Feeling/Activity</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Posts Feed -->
+            <div id="postsContainer">
+                <!-- Posts will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Profile View -->
+        <div id="profileView" class="max-w-4xl mx-auto hidden">
+            <!-- Profile Header -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+                <div class="h-48 gradient-bg relative">
+                    <div class="absolute -bottom-16 left-8">
+                        <img src="https://placehold.co/100x100/4f46e5/white?text=JD" alt="John Doe" class="w-32 h-32 rounded-full border-4 border-white object-cover">
+                        <div class="online-indicator"></div>
+                    </div>
+                </div>
+                
+                <div class="pt-20 px-8 pb-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">John Doe</h2>
+                            <p class="text-gray-600">@john_doe</p>
+                            <p class="mt-2 text-gray-700 max-w-2xl">Digital creator & social media enthusiast</p>
+                        </div>
+                        
+                        <button id="editProfileBtn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition-colors font-medium">
+                            Edit Profile
+                        </button>
+                    </div>
+                    
+                    <div class="flex mt-6 space-x-6">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-gray-900">1,240</p>
+                            <p class="text-gray-600">Followers</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-gray-900">320</p>
+                            <p class="text-gray-600">Following</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Links -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Social Links</h3>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="socialLinksDisplay">
+                    <a href="https://facebook.com/johndoe" target="_blank" class="social-card flex flex-col items-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all border border-indigo-100 group">
+                        <div class="bg-white p-2 rounded-full mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-facebook text-blue-600 text-xl"></i>
+                        </div>
+                        <span class="text-gray-700 capitalize font-medium">facebook</span>
+                    </a>
+                    <a href="https://youtube.com/johndoe" target="_blank" class="social-card flex flex-col items-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all border border-indigo-100 group">
+                        <div class="bg-white p-2 rounded-full mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-youtube text-red-600 text-xl"></i>
+                        </div>
+                        <span class="text-gray-700 capitalize font-medium">youtube</span>
+                    </a>
+                    <a href="https://instagram.com/johndoe" target="_blank" class="social-card flex flex-col items-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all border border-indigo-100 group">
+                        <div class="bg-white p-2 rounded-full mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-instagram text-pink-600 text-xl"></i>
+                        </div>
+                        <span class="text-gray-700 capitalize font-medium">instagram</span>
+                    </a>
+                    <a href="https://tiktok.com/@johndoe" target="_blank" class="social-card flex flex-col items-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all border border-indigo-100 group">
+                        <div class="bg-white p-2 rounded-full mb-2 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-tiktok text-black text-xl"></i>
+                        </div>
+                        <span class="text-gray-700 capitalize font-medium">tiktok</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- User Posts -->
+            <div id="userPostsContainer">
+                <!-- User posts will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Other Views -->
+        <div id="exploreView" class="max-w-4xl mx-auto hidden">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Explore</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Explore content will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div id="messagesView" class="max-w-4xl mx-auto hidden">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Messages</h2>
+            <p class="text-gray-600">Your messages will appear here.</p>
+        </div>
+        
+        <div id="settingsView" class="max-w-2xl mx-auto hidden">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Settings</h2>
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="nameInput" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="John Doe">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" id="usernameInput" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="john_doe">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                        <textarea id="bioInput" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">Digital creator & social media enthusiast</textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Profile Picture</label>
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/100x100/4f46e5/white?text=JD" alt="Profile" class="w-16 h-16 rounded-full object-cover" id="profilePic">
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                                Change Photo
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button id="saveSettingsBtn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Customer Support Section -->
+    <div class="fixed bottom-20 right-20 z-50">
+        <div class="bg-white rounded-xl shadow-lg p-4 w-80 hidden" id="supportPanel">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-gray-900">Customer Support</h3>
+                <button id="closeSupport" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p class="text-gray-600 text-sm mb-4">Need help? Contact our support team directly via WhatsApp!</p>
+            
+            <div class="mb-3">
+                <div class="support-number">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/2290140892554" target="_blank">+229 01 40 89 25 54</a>
+                </div>
+                <div class="support-number">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/2290154155667" target="_blank">+229 01 54 15 56 67</a>
+                </div>
+            </div>
+            
+            <a href="https://wa.me/2290140892554" target="_blank" class="w-full bg-green-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors">
+                <i class="fab fa-whatsapp"></i>
+                <span>Chat on WhatsApp</span>
+            </a>
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-xs text-gray-500">Support hours: Mon-Fri 9AM-6PM WAT</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/2290140892554" target="_blank" class="floating-whatsapp pulse">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- Chat Toggle Button -->
+    <div class="chat-toggle" id="chatToggle">
+        <i class="fas fa-comments"></i>
+        <span class="unread-badge" id="unreadBadge" style="display: none;">3</span>
+    </div>
+    
+    <!-- Chat List -->
+    <div class="chat-list" id="chatList">
+        <div class="chat-list-header">
+            <i class="fas fa-comments mr-2"></i> Messages
+        </div>
+        <div id="chatListItems">
+            <!-- Chat list items will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header" id="chatHeader">
+            <img src="" alt="" id="chatUserAvatar">
+            <div>
+                <div class="font-bold" id="chatUserName">User Name</div>
+                <div class="text-sm opacity-80" id="chatUserStatus">Online</div>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be populated by JavaScript -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="sendMessageBtn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- AI Assistant Modal -->
+    <div id="aiModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col h-[500px]">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="font-bold text-lg text-gray-900 flex items-center">
+                    <i class="fas fa-comment-dots text-indigo-600 mr-2"></i>
+                    CoolPageBooster AI Assistant
+                </h3>
+                <button id="closeAiModal" class="p-1 rounded-full hover:bg-gray-100">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="aiMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-comment-dots text-5xl mb-4"></i>
+                    <p>Ask me anything about CoolPageBooster!</p>
+                    <p class="text-sm mt-2">How to add social links? How to find users? How does following work?</p>
+                </div>
+            </div>
+            
+            <form id="aiForm" class="p-4 border-t border-gray-200">
+                <div class="flex space-x-2">
+                    <input
+                        type="text"
+                        id="aiInput"
+                        placeholder="Ask a question..."
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                    <button type="submit" class="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation for Mobile -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-2">
+        <button class="p-3 rounded-full text-indigo-600 bg-indigo-50" data-view="feed">
+            <i class="fas fa-home text-xl"></i>
+        </button>
+        <button class="p-3 rounded-full text-gray-600" data-view="explore">
+            <i class="fas fa-compass text-xl"></i>
+        </button>
+        <button class="p-3 rounded-full text-gray-600" data-view="messages">
+            <i class="fas fa-envelope text-xl"></i>
+        </button>
+        <button class="p-3 rounded-full text-gray-600" data-view="profile">
+            <i class="fas fa-user text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Footer with Social Media Links -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-globe text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">CoolPageBooster</h2>
+                    </div>
+                    <p class="text-gray-600 max-w-md">
+                        Connect all your social profiles in one place. Follow others and grow your audience.
+                    </p>
+                </div>
+                
+                <div class="footer-social">
+                    <h3 class="font-bold text-gray-900 mb-4">Follow Our Social Media</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://facebook.com/coolpagebooster" target="_blank" class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700 transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com/coolpagebooster" target="_blank" class="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white hover:bg-blue-500 transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com/coolpagebooster" target="_blank" class="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center text-white hover:bg-pink-700 transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/coolpagebooster" target="_blank" class="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center text-white hover:bg-blue-800 transition-all">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://youtube.com/coolpagebooster" target="_blank" class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white hover:bg-red-700 transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 mt-8 pt-6 text-center text-gray-600 text-sm">
+                <p>© 2023 CoolPageBooster. All rights reserved.</p>
+                <div class="mt-2 flex justify-center space-x-6">
+                    <a href="#" class="hover:text-indigo-600">Privacy Policy</a>
+                    <a href="#" class="hover:text-indigo-600">Terms of Service</a>
+                    <a href="#" class="hover:text-indigo-600">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Translation dictionary
+        const translations = {
+            en: {
+                feed: "Feed",
+                profile: "My Profile",
+                explore: "Explore",
+                notifications: "Notifications",
+                messages: "Messages",
+                saved: "Saved",
+                settings: "Settings",
+                searchPlaceholder: "Search users or posts...",
+                whatsOnMind: "What's on your mind?",
+                liveVideo: "Live Video",
+                photoVideo: "Photo/Video",
+                feelingActivity: "Feeling/Activity",
+                followers: "Followers",
+                following: "Following",
+                socialLinks: "Social Links",
+                editProfile: "Edit Profile",
+                saveChanges: "Save Changes",
+                customerSupport: "Customer Support",
+                chatOnWhatsApp: "Chat on WhatsApp",
+                supportHours: "Support hours: Mon-Fri 9AM-6PM WAT",
+                aiAssistant: "CoolPageBooster AI Assistant",
+                askQuestion: "Ask a question...",
+                follow: "Follow",
+                followingBtn: "Following",
+                online: "Online",
+                offline: "Offline",
+                comments: "Comments",
+                addComment: "Add a comment...",
+                post: "Post",
+                like: "Like",
+                comment: "Comment",
+                share: "Share",
+                save: "Save"
+            },
+            fr: {
+                feed: "Fil d'actualité",
+                profile: "Mon profil",
+                explore: "Explorer",
+                notifications: "Notifications",
+                messages: "Messages",
+                saved: "Enregistré",
+                settings: "Paramètres",
+                searchPlaceholder: "Rechercher des utilisateurs ou des publications...",
+                whatsOnMind: "Qu'avez-vous en tête ?",
+                liveVideo: "Vidéo en direct",
+                photoVideo: "Photo/Vidéo",
+                feelingActivity: "Sentiment/Activité",
+                followers: "Abonnés",
+                following: "Abonnements",
+                socialLinks: "Liens sociaux",
+                editProfile: "Modifier le profil",
+                saveChanges: "Enregistrer les modifications",
+                customerSupport: "Support client",
+                chatOnWhatsApp: "Discuter sur WhatsApp",
+                supportHours: "Heures de support : Lun-Ven 9h-18h WAT",
+                aiAssistant: "Assistant IA CoolPageBooster",
+                askQuestion: "Poser une question...",
+                follow: "Suivre",
+                followingBtn: "Abonné",
+                online: "En ligne",
+                offline: "Hors ligne",
+                comments: "Commentaires",
+                addComment: "Ajouter un commentaire...",
+                post: "Publier",
+                like: "J'aime",
+                comment: "Commenter",
+                share: "Partager",
+                save: "Enregistrer"
+            },
+            es: {
+                feed: "Inicio",
+                profile: "Mi perfil",
+                explore: "Explorar",
+                notifications: "Notificaciones",
+                messages: "Mensajes",
+                saved: "Guardado",
+                settings: "Ajustes",
+                searchPlaceholder: "Buscar usuarios o publicaciones...",
+                whatsOnMind: "¿En qué estás pensando?",
+                liveVideo: "Vídeo en vivo",
+                photoVideo: "Foto/Vídeo",
+                feelingActivity: "Sentimiento/Actividad",
+                followers: "Seguidores",
+                following: "Siguiendo",
+                socialLinks: "Enlaces sociales",
+                editProfile: "Editar perfil",
+                saveChanges: "Guardar cambios",
+                customerSupport: "Soporte al cliente",
+                chatOnWhatsApp: "Chatear en WhatsApp",
+                supportHours: "Horario de soporte: Lun-Vie 9AM-6PM WAT",
+                aiAssistant: "Asistente IA CoolPageBooster",
+                askQuestion: "Hacer una pregunta...",
+                follow: "Seguir",
+                followingBtn: "Siguiendo",
+                online: "En línea",
+                offline: "Desconectado",
+                comments: "Comentarios",
+                addComment: "Añadir un comentario...",
+                post: "Publicar",
+                like: "Me gusta",
+                comment: "Comentar",
+                share: "Compartir",
+                save: "Guardar"
+            }
+        };
+
+        // Current language
+        let currentLang = 'en';
+
+        // Mock data
+        const mockUsers = [
+            {
+                id: 1,
+                username: 'john_doe',
+                name: 'John Doe',
+                bio: 'Digital creator & social media enthusiast',
+                avatar: 'https://placehold.co/100x100/4f46e5/white?text=JD',
+                socialLinks: {
+                    facebook: 'https://facebook.com/johndoe',
+                    youtube: 'https://youtube.com/johndoe',
+                    instagram: 'https://instagram.com/johndoe',
+                    tiktok: 'https://tiktok.com/@johndoe'
+                },
+                followers: 1240,
+                following: 320,
+                isOnline: true
+            },
+            {
+                id: 2,
+                username: 'sarah_smith',
+                name: 'Sarah Smith',
+                bio: 'Travel blogger & photographer',
+                avatar: 'https://placehold.co/100x100/ec4899/white?text=SS',
+                socialLinks: {
+                    instagram: 'https://instagram.com/sarahsmith',
+                    tiktok: 'https://tiktok.com/@sarahsmith'
+                },
+                followers: 2150,
+                following: 180,
+                isOnline: true
+            },
+            {
+                id: 3,
+                username: 'tech_guru',
+                name: 'Alex Johnson',
+                bio: 'Tech reviewer & AI enthusiast',
+                avatar: 'https://placehold.co/100x100/0ea5e9/white?text=TG',
+                socialLinks: {
+                    youtube: 'https://youtube.com/techguru',
+                    twitter: 'https://twitter.com/techguru',
+                    github: 'https://github.com/techguru'
+                },
+                followers: 3420,
+                following: 156,
+                isOnline: false
+            },
+            {
+                id: 4,
+                username: 'design_master',
+                name: 'Emma Wilson',
+                bio: 'UI/UX Designer & Illustrator',
+                avatar: 'https://placehold.co/100x100/8b5cf6/white?text=EW',
+                socialLinks: {
+                    instagram: 'https://instagram.com/designmaster',
+                    dribbble: 'https://dribbble.com/designmaster'
+                },
+                followers: 1850,
+                following: 210,
+                isOnline: true
+            }
+        ];
+
+        // Mock posts
+        const mockPosts = [
+            {
+                id: 1,
+                userId: 1,
+                content: "Just launched my new website! Check it out and let me know what you think.",
+                media: "https://placehold.co/600x400/4f46e5/white?text=Website+Launch",
+                mediaType: "image",
+                likes: 42,
+                comments: 8,
+                timestamp: "2 hours ago",
+                commentsList: [
+                    { id: 1, userId: 2, text: "Looks amazing! Great work!", timestamp: "1 hour ago" },
+                    { id: 2, userId: 3, text: "The design is really clean. What framework did you use?", timestamp: "45 minutes ago" }
+                ]
+            },
+            {
+                id: 2,
+                userId: 2,
+                content: "Beautiful sunset from my trip to Bali! 🌅",
+                media: "https://placehold.co/600x400/ec4899/white?text=Bali+Sunset",
+                mediaType: "image",
+                likes: 128,
+                comments: 15,
+                timestamp: "5 hours ago",
+                commentsList: [
+                    { id: 1, userId: 1, text: "Stunning! I need to visit Bali soon.", timestamp: "4 hours ago" },
+                    { id: 2, userId: 4, text: "The colors are incredible! What camera do you use?", timestamp: "3 hours ago" }
+                ]
+            },
+            {
+                id: 3,
+                userId: 3,
+                content: "Check out my latest tech review on the new smartphone!",
+                media: "https://placehold.co/600x400/0ea5e9/white?text=Tech+Review",
+                mediaType: "video",
+                likes: 89,
+                comments: 24,
+                timestamp: "1 day ago",
+                commentsList: [
+                    { id: 1, userId: 1, text: "Great review! Really helpful before I buy.", timestamp: "22 hours ago" },
+                    { id: 2, userId: 2, text: "I have the same phone. The battery life is amazing!", timestamp: "20 hours ago" }
+                ]
+            },
+            {
+                id: 4,
+                userId: 4,
+                content: "New UI design for a fitness app. What do you think?",
+                media: "https://placehold.co/600x400/8b5cf6/white?text=UI+Design",
+                mediaType: "image",
+                likes: 76,
+                comments: 12,
+                timestamp: "2 days ago",
+                commentsList: [
+                    { id: 1, userId: 1, text: "Love the color scheme! Very modern.", timestamp: "1 day ago" },
+                    { id: 2, userId: 3, text: "The layout is clean and intuitive. Great job!", timestamp: "1 day ago" }
+                ]
+            }
+        ];
+
+        const aiResponses = [
+            "CoolPageBooster helps you connect all your social profiles in one place!",
+            "To add your social links, go to your profile settings and click 'Edit Profile'.",
+            "You can search for other users by typing their username in the search bar.",
+            "The follow button lets you connect with other CoolPageBooster users.",
+            "Our AI assistant is here to help you navigate the platform!",
+            "You can customize your profile with a bio, profile picture, and social links.",
+            "Follow other users to see their latest social updates in your feed.",
+            "CoolPageBooster is completely free to use!"
+        ];
+
+        // Mock chat data
+        const mockChats = [
+            {
+                id: 1,
+                userId: 2,
+                lastMessage: "Hey, did you see my new post?",
+                unread: true,
+                timestamp: "2:30 PM"
+            },
+            {
+                id: 2,
+                userId: 3,
+                lastMessage: "Thanks for the follow!",
+                unread: false,
+                timestamp: "Yesterday"
+            },
+            {
+                id: 3,
+                userId: 4,
+                lastMessage: "Let's collaborate on that project",
+                unread: true,
+                timestamp: "10:15 AM"
+            }
+        ];
+
+        const mockMessages = {
+            2: [
+                { id: 1, sender: 'other', text: "Hey John! How's it going?", timestamp: "10:30 AM" },
+                { id: 2, sender: 'me', text: "Hi Sarah! All good, just working on some new content.", timestamp: "10:32 AM" },
+                { id: 3, sender: 'other', text: "That's awesome! I saw your latest post - really liked it!", timestamp: "10:35 AM" },
+                { id: 4, sender: 'me', text: "Thanks! I'm planning to post more travel content next week.", timestamp: "10:37 AM" },
+                { id: 5, sender: 'other', text: "Hey, did you see my new post?", timestamp: "2:30 PM" }
+            ],
+            3: [
+                { id: 1, sender: 'me', text: "Hey Alex, I just followed you on CoolPageBooster!", timestamp: "9:15 AM" },
+                { id: 2, sender: 'other', text: "Thanks for the follow!", timestamp: "9:20 AM" }
+            ],
+            4: [
+                { id: 1, sender: 'me', text: "Hi Emma, I love your design work!", timestamp: "8:45 AM" },
+                { id: 2, sender: 'other', text: "Thank you! That means a lot coming from you.", timestamp: "8:50 AM" },
+                { id: 3, sender: 'me', text: "I have a project idea I'd like to discuss with you", timestamp: "8:52 AM" },
+                { id: 4, sender: 'other', text: "Let's collaborate on that project", timestamp: "10:15 AM" }
+            ]
+        };
+
+        // DOM Elements with null checks
+        const profileView = document.getElementById('profileView');
+        const feedView = document.getElementById('feedView');
+        const exploreView = document.getElementById('exploreView');
+        const messagesView = document.getElementById('messagesView');
+        const settingsView = document.getElementById('settingsView');
+        const aiModal = document.getElementById('aiModal');
+        const aiMessages = document.getElementById('aiMessages');
+        const aiInput = document.getElementById('aiInput');
+        const aiForm = document.getElementById('aiForm');
+        const aiButton = document.getElementById('aiButton');
+        const aiBadge = document.getElementById('aiBadge');
+        const closeAiModal = document.getElementById('closeAiModal');
+        const searchInput = document.getElementById('searchInput');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        const profileTrigger = document.getElementById('profileTrigger');
+        const settingsButton = document.getElementById('settingsButton');
+        const supportPanel = document.getElementById('supportPanel');
+        const closeSupport = document.getElementById('closeSupport');
+        const chatToggle = document.getElementById('chatToggle');
+        const chatList = document.getElementById('chatList');
+        const chatContainer = document.getElementById('chatContainer');
+        const chatHeader = document.getElementById('chatHeader');
+        const chatUserAvatar = document.getElementById('chatUserAvatar');
+        const chatUserName = document.getElementById('chatUserName');
+        const chatUserStatus = document.getElementById('chatUserStatus');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const chatListItems = document.getElementById('chatListItems');
+        const unreadBadge = document.getElementById('unreadBadge');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const mobileNavButtons = document.querySelectorAll('.md\\:hidden .p-3');
+        const mainContent = document.getElementById('mainContent');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+        const languageOptions = document.querySelectorAll('.language-option');
+        const postsContainer = document.getElementById('postsContainer');
+        const userPostsContainer = document.getElementById('userPostsContainer');
+
+        // Current state
+        let currentView = 'feed';
+        let aiMessagesList = [];
+        let editingProfile = false;
+        let currentChatId = null;
+        let unreadCount = mockChats.filter(chat => chat.unread).length;
+
+        // Initialize
+        function init() {
+            renderPosts();
+            renderUserPosts();
+            renderSuggestions();
+            renderChatList();
+            updateUnreadBadge();
+            setupEventListeners();
+            updateTranslations();
+        }
+
+        // Render posts with null check
+        function renderPosts() {
+            if (!postsContainer) return;
+            
+            postsContainer.innerHTML = '';
+            
+            mockPosts.forEach(post => {
+                const user = mockUsers.find(u => u.id === post.userId);
+                if (!user) return;
+                
+                const postEl = document.createElement('div');
+                postEl.className = 'post-container';
+                postEl.innerHTML = `
+                    <div class="post-header">
+                        <div class="relative">
+                            <img src="${user.avatar}" alt="${user.name}">
+                            ${user.isOnline ? '<div class="online-indicator"></div>' : ''}
+                        </div>
+                        <div>
+                            <div class="font-bold">${user.name}</div>
+                            <div class="text-gray-600 text-sm">${post.timestamp}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p class="py-3 px-1">${post.content}</p>
+                        ${post.media ? 
+                            (post.mediaType === 'video' ? 
+                                `<video class="post-video" controls><source src="${post.media}" type="video/mp4">Your browser does not support the video tag.</video>` : 
+                                `<img src="${post.media}" alt="Post media" class="post-image">`
+                            ) : 
+                            ''
+                        }
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">
+                            <i class="far fa-heart"></i>
+                            <span>${post.likes}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-comment"></i>
+                            <span>${post.comments}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>${translations[currentLang].share}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-bookmark"></i>
+                            <span>${translations[currentLang].save}</span>
+                        </div>
+                    </div>
+                    <div class="post-comments">
+                        <div class="font-bold text-sm mb-2">${translations[currentLang].comments} (${post.comments})</div>
+                        ${post.commentsList.map(comment => {
+                            const commentUser = mockUsers.find(u => u.id === comment.userId);
+                            return `
+                                <div class="comment">
+                                    <img src="${commentUser.avatar}" alt="${commentUser.name}">
+                                    <div class="comment-content">
+                                        <div class="comment-header">
+                                            <span class="comment-author">${commentUser.name}</span>
+                                            <span class="comment-time">${comment.timestamp}</span>
+                                        </div>
+                                        <div class="comment-text">${comment.text}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                        <div class="comment-input">
+                            <input type="text" placeholder="${translations[currentLang].addComment}">
+                            <button>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                postsContainer.appendChild(postEl);
+            });
+        }
+
+        // Render user posts with null check
+        function renderUserPosts() {
+            if (!userPostsContainer) return;
+            
+            userPostsContainer.innerHTML = '';
+            
+            const userPosts = mockPosts.filter(post => post.userId === 1);
+            
+            if (userPosts.length === 0) {
+                userPostsContainer.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+                        <i class="fas fa-image text-6xl text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mt-4">No posts yet</h3>
+                        <p class="text-gray-600 mt-2">Share your first post to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userPosts.forEach(post => {
+                const user = mockUsers.find(u => u.id === post.userId);
+                if (!user) return;
+                
+                const postEl = document.createElement('div');
+                postEl.className = 'post-container mb-6';
+                postEl.innerHTML = `
+                    <div class="post-header">
+                        <div class="relative">
+                            <img src="${user.avatar}" alt="${user.name}">
+                            ${user.isOnline ? '<div class="online-indicator"></div>' : ''}
+                        </div>
+                        <div>
+                            <div class="font-bold">${user.name}</div>
+                            <div class="text-gray-600 text-sm">${post.timestamp}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p class="py-3 px-1">${post.content}</p>
+                        ${post.media ? 
+                            (post.mediaType === 'video' ? 
+                                `<video class="post-video" controls><source src="${post.media}" type="video/mp4">Your browser does not support the video tag.</video>` : 
+                                `<img src="${post.media}" alt="Post media" class="post-image">`
+                            ) : 
+                            ''
+                        }
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">
+                            <i class="far fa-heart"></i>
+                            <span>${post.likes}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-comment"></i>
+                            <span>${post.comments}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>${translations[currentLang].share}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-bookmark"></i>
+                            <span>${translations[currentLang].save}</span>
+                        </div>
+                    </div>
+                `;
+                userPostsContainer.appendChild(postEl);
+            });
+        }
+
+        // Render suggested users with null check
+        function renderSuggestions() {
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            if (!suggestionsContainer) return;
+            
+            suggestionsContainer.innerHTML = '';
+            const currentUser = mockUsers[0];
+            const suggestions = mockUsers.filter(user => user.id !== currentUser.id);
+            
+            suggestions.forEach(user => {
+                const suggestionEl = document.createElement('div');
+                suggestionEl.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-xl';
+                suggestionEl.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <img src="${user.avatar}" alt="${user.name}" class="w-12 h-12 rounded-full object-cover">
+                            ${user.isOnline ? '<div class="online-indicator"></div>' : ''}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900">${user.name}</h4>
+                            <p class="text-gray-600">@${user.username}</p>
+                        </div>
+                    </div>
+                    <button class="follow-btn px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors flex items-center space-x-1" data-id="${user.id}">
+                        <i class="fas fa-heart"></i>
+                        <span>${translations[currentLang].follow}</span>
+                    </button>
+                `;
+                suggestionsContainer.appendChild(suggestionEl);
+            });
+            
+            // Add event listeners to follow buttons
+            document.querySelectorAll('.follow-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const userId = e.currentTarget.dataset.id;
+                    handleFollow(userId);
+                });
+            });
+        }
+
+        // Handle follow action
+        function handleFollow(userId) {
+            console.log('Following user:', userId);
+            // In a real app, this would update the backend
+            const btn = event.currentTarget;
+            btn.innerHTML = `<i class="fas fa-check"></i> ${translations[currentLang].followingBtn}`;
+            btn.classList.remove('bg-indigo-600');
+            btn.classList.add('bg-green-600');
+        }
+
+        // Show view with null checks
+        function showView(view) {
+            currentView = view;
+            if (feedView) feedView.classList.toggle('hidden', view !== 'feed');
+            if (profileView) profileView.classList.toggle('hidden', view !== 'profile');
+            if (exploreView) exploreView.classList.toggle('hidden', view !== 'explore');
+            if (messagesView) messagesView.classList.toggle('hidden', view !== 'messages');
+            if (settingsView) settingsView.classList.toggle('hidden', view !== 'settings');
+            
+            // Update sidebar active state
+            sidebarItems.forEach(item => {
+                if (item.dataset.view === view) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Update mobile navigation active state
+            mobileNavButtons.forEach(btn => {
+                if (btn.dataset.view === view) {
+                    btn.classList.add('text-indigo-600', 'bg-indigo-50');
+                } else {
+                    btn.classList.remove('text-indigo-600', 'bg-indigo-50');
+                }
+            });
+        }
+
+        // Handle AI submit
+        function handleAiSubmit(e) {
+            e.preventDefault();
+            if (!aiInput || !aiInput.value.trim()) return;
+            
+            // Add user message
+            const userMessage = { text: aiInput.value, sender: 'user' };
+            aiMessagesList.push(userMessage);
+            renderAiMessages();
+            
+            // Clear input
+            aiInput.value = '';
+            
+            // Show badge if not in modal
+            if (aiModal && !aiModal.classList.contains('hidden')) {
+                if (aiBadge) aiBadge.classList.remove('hidden');
+            }
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                const aiMessage = { text: randomResponse, sender: 'ai' };
+                aiMessagesList.push(aiMessage);
+                renderAiMessages();
+                if (aiBadge) aiBadge.classList.add('hidden');
+            }, 800);
+        }
+
+        // Render AI messages with null check
+        function renderAiMessages() {
+            if (!aiMessages) return;
+            
+            aiMessages.innerHTML = '';
+            
+            if (aiMessagesList.length === 0) {
+                aiMessages.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-comment-dots text-5xl mb-4"></i>
+                        <p>Ask me anything about CoolPageBooster!</p>
+                        <p class="text-sm mt-2">How to add social links? How to find users? How does following work?</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            aiMessagesList.forEach(msg => {
+                const messageEl = document.createElement('div');
+                messageEl.className = `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`;
+                messageEl.innerHTML = `
+                    <div class="max-w-[80%] px-4 py-2 ${msg.sender === 'user' ? 'message-user' : 'message-ai'}">
+                        ${msg.text}
+                    </div>
+                `;
+                aiMessages.appendChild(messageEl);
+            });
+            
+            // Scroll to bottom
+            if (aiMessages) aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        // Handle search
+        function handleSearch() {
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            if (query === '') {
+                // Reset to default view
+                return;
+            }
+            
+            // In a real app, this would search both users and posts
+            console.log('Searching for:', query);
+        }
+
+        // Render chat list with null check
+        function renderChatList() {
+            if (!chatListItems) return;
+            
+            chatListItems.innerHTML = '';
+            
+            mockChats.forEach(chat => {
+                const user = mockUsers.find(u => u.id === chat.userId);
+                if (!user) return;
+                
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-list-item';
+                chatItem.dataset.chatId = chat.id;
+                chatItem.innerHTML = `
+                    <div class="relative">
+                        <img src="${user.avatar}" alt="${user.name}">
+                        ${user.isOnline ? '<div class="online-indicator"></div>' : ''}
+                    </div>
+                    <div class="user-info">
+                        <div class="username">${user.name}</div>
+                        <div class="last-message">${chat.lastMessage}</div>
+                    </div>
+                    <div class="text-xs text-gray-500">${chat.timestamp}</div>
+                    ${chat.unread ? '<div class="w-3 h-3 bg-blue-500 rounded-full ml-2"></div>' : ''}
+                `;
+                chatListItems.appendChild(chatItem);
+            });
+            
+            // Add event listeners to chat items
+            document.querySelectorAll('.chat-list-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const chatId = parseInt(item.dataset.chatId);
+                    openChat(chatId);
+                });
+            });
+        }
+
+        // Open chat with null checks
+        function openChat(chatId) {
+            const chat = mockChats.find(c => c.id === chatId);
+            if (!chat) return;
+            
+            const user = mockUsers.find(u => u.id === chat.userId);
+            if (!user) return;
+            
+            // Update chat header
+            if (chatUserAvatar) chatUserAvatar.src = user.avatar;
+            if (chatUserName) chatUserName.textContent = user.name;
+            if (chatUserStatus) chatUserStatus.textContent = user.isOnline ? translations[currentLang].online : translations[currentLang].offline;
+            
+            // Mark as read
+            chat.unread = false;
+            updateUnreadBadge();
+            renderChatList();
+            
+            // Load messages
+            loadMessages(chatId);
+            
+            // Show chat container
+            if (chatList) chatList.style.display = 'none';
+            if (chatContainer) chatContainer.style.display = 'flex';
+            currentChatId = chatId;
+        }
+
+        // Load messages for a chat with null check
+        function loadMessages(chatId) {
+            const chat = mockChats.find(c => c.id === chatId);
+            if (!chat) return;
+            
+            const messages = mockMessages[chat.userId] || [];
+            if (!chatMessages) return;
+            
+            chatMessages.innerHTML = '';
+            
+            messages.forEach(msg => {
+                const messageEl = document.createElement('div');
+                messageEl.className = `message ${msg.sender === 'me' ? 'message-sent' : 'message-received'}`;
+                messageEl.textContent = msg.text;
+                chatMessages.appendChild(messageEl);
+            });
+            
+            // Scroll to bottom
+            if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Send message with null checks
+        function sendMessage() {
+            const text = messageInput ? messageInput.value.trim() : '';
+            if (!text || !currentChatId) return;
+            
+            // Add to messages
+            const chat = mockChats.find(c => c.id === currentChatId);
+            if (!chat) return;
+            
+            const messages = mockMessages[chat.userId] || [];
+            messages.push({
+                id: messages.length + 1,
+                sender: 'me',
+                text: text,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            mockMessages[chat.userId] = messages;
+            
+            // Update last message in chat list
+            chat.lastMessage = text;
+            chat.timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Reload messages
+            loadMessages(currentChatId);
+            
+            // Clear input
+            if (messageInput) messageInput.value = '';
+        }
+
+        // Update unread badge with null check
+        function updateUnreadBadge() {
+            unreadCount = mockChats.filter(chat => chat.unread).length;
+            if (!unreadBadge) return;
+            
+            if (unreadCount > 0) {
+                unreadBadge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                unreadBadge.style.display = 'flex';
+            } else {
+                unreadBadge.style.display = 'none';
+            }
+        }
+
+        // Update translations with null checks
+        function updateTranslations() {
+            // Update navigation items
+            const feedItem = document.querySelector('[data-view="feed"] span');
+            const profileItem = document.querySelector('[data-view="profile"] span');
+            const exploreItem = document.querySelector('[data-view="explore"] span');
+            const notificationsItem = document.querySelector('[data-view="notifications"] span');
+            const messagesItem = document.querySelector('[data-view="messages"] span');
+            const savedItem = document.querySelector('[data-view="saved"] span');
+            const settingsItem = document.querySelector('[data-view="settings"] span');
+            
+            if (feedItem) feedItem.textContent = translations[currentLang].feed;
+            if (profileItem) profileItem.textContent = translations[currentLang].profile;
+            if (exploreItem) exploreItem.textContent = translations[currentLang].explore;
+            if (notificationsItem) notificationsItem.textContent = translations[currentLang].notifications;
+            if (messagesItem) messagesItem.textContent = translations[currentLang].messages;
+            if (savedItem) savedItem.textContent = translations[currentLang].saved;
+            if (settingsItem) settingsItem.textContent = translations[currentLang].settings;
+            
+            // Update placeholders and buttons
+            if (searchInput) searchInput.placeholder = translations[currentLang].searchPlaceholder;
+            const whatsOnMindBtn = document.querySelector('.whats-on-mind-btn');
+            if (whatsOnMindBtn) whatsOnMindBtn.textContent = translations[currentLang].whatsOnMind;
+            
+            const liveVideoBtn = document.querySelector('.live-video-btn span:nth-child(2)');
+            if (liveVideoBtn) liveVideoBtn.textContent = translations[currentLang].liveVideo;
+            
+            const photoVideoBtn = document.querySelector('.photo-video-btn span:nth-child(2)');
+            if (photoVideoBtn) photoVideoBtn.textContent = translations[currentLang].photoVideo;
+            
+            const feelingActivityBtn = document.querySelector('.feeling-activity-btn span:nth-child(2)');
+            if (feelingActivityBtn) feelingActivityBtn.textContent = translations[currentLang].feelingActivity;
+            
+            const followersCount = document.querySelector('#followers-count + p');
+            if (followersCount) followersCount.textContent = translations[currentLang].followers;
+            
+            const followingCount = document.querySelector('#following-count + p');
+            if (followingCount) followingCount.textContent = translations[currentLang].following;
+            
+            const socialLinksHeader = document.querySelector('#socialLinksDisplay + h3');
+            if (socialLinksHeader) socialLinksHeader.textContent = translations[currentLang].socialLinks;
+            
+            if (editProfileBtn) editProfileBtn.textContent = translations[currentLang].editProfile;
+            if (saveSettingsBtn) saveSettingsBtn.textContent = translations[currentLang].saveChanges;
+            
+            const supportHeader = document.querySelector('#supportPanel h3');
+            if (supportHeader) supportHeader.textContent = translations[currentLang].customerSupport;
+            
+            const chatOnWhatsAppBtn = document.querySelector('.chat-on-whatsapp-btn span');
+            if (chatOnWhatsAppBtn) chatOnWhatsAppBtn.textContent = translations[currentLang].chatOnWhatsApp;
+            
+            const supportHours = document.querySelector('.support-hours');
+            if (supportHours) supportHours.textContent = translations[currentLang].supportHours;
+            
+            const aiModalHeader = document.querySelector('#aiModal h3');
+            if (aiModalHeader) {
+                aiModalHeader.innerHTML = `<i class="fas fa-comment-dots text-indigo-600 mr-2"></i>${translations[currentLang].aiAssistant}`;
+            }
+            
+            if (aiInput) aiInput.placeholder = translations[currentLang].askQuestion;
+            
+            // Update follow buttons
+            document.querySelectorAll('.follow-btn span').forEach(btn => {
+                btn.textContent = translations[currentLang].follow;
+            });
+            
+            // Update chat status
+            if (chatUserStatus) {
+                const user = mockUsers.find(u => u.id === 1);
+                if (user) {
+                    chatUserStatus.textContent = user.isOnline ? translations[currentLang].online : translations[currentLang].offline;
+                }
+            }
+            
+            // Update current language display
+            if (currentLanguage) {
+                currentLanguage.textContent = translations[currentLang].en || 'English';
+            }
+            
+            // Update posts
+            renderPosts();
+            renderUserPosts();
+        }
+
+        // Setup event listeners with null checks
+        function setupEventListeners() {
+            // Navigation
+            if (profileTrigger) {
+                profileTrigger.addEventListener('click', () => showView('profile'));
+            }
+            if (settingsButton) {
+                settingsButton.addEventListener('click', () => showView('settings'));
+            }
+            
+            // Sidebar navigation
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    showView(item.dataset.view);
+                    if (sidebar) sidebar.classList.remove('open');
+                    if (mainContent) mainContent.classList.remove('sidebar-open');
+                });
+            });
+            
+            // Mobile navigation
+            mobileNavButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showView(btn.dataset.view);
+                });
+            });
+            
+            // Sidebar toggle
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.add('open');
+                    if (mainContent) mainContent.classList.add('sidebar-open');
+                });
+            }
+            
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.remove('open');
+                    if (mainContent) mainContent.classList.remove('sidebar-open');
+                });
+            }
+            
+            // Language selector
+            const languageSelectorBtn = document.querySelector('.language-selector button');
+            if (languageSelectorBtn) {
+                languageSelectorBtn.addEventListener('click', () => {
+                    if (languageDropdown) {
+                        languageDropdown.style.display = languageDropdown.style.display === 'block' ? 'none' : 'block';
+                    }
+                });
+            }
+            
+            languageOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    currentLang = option.dataset.lang;
+                    languageOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    updateTranslations();
+                    if (languageDropdown) languageDropdown.style.display = 'none';
+                });
+            });
+            
+            // Close language dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!document.querySelector('.language-selector').contains(e.target)) {
+                    if (languageDropdown) languageDropdown.style.display = 'none';
+                }
+            });
+            
+            // AI
+            if (aiButton) {
+                aiButton.addEventListener('click', () => {
+                    if (aiModal) aiModal.classList.remove('hidden');
+                    if (aiBadge) aiBadge.classList.add('hidden');
+                });
+            }
+            if (closeAiModal) {
+                closeAiModal.addEventListener('click', () => {
+                    if (aiModal) aiModal.classList.add('hidden');
+                });
+            }
+            if (aiForm) {
+                aiForm.addEventListener('submit', handleAiSubmit);
+            }
+            
+            // Search
+            if (searchInput) {
+                searchInput.addEventListener('input', handleSearch);
+            }
+            
+            // Profile editing
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', () => {
+                    if (editingProfile) {
+                        // Save changes
+                        editingProfile = false;
+                        editProfileBtn.textContent = translations[currentLang].editProfile;
+                        editProfileBtn.classList.remove('bg-indigo-600', 'text-white');
+                        editProfileBtn.classList.add('bg-gray-200', 'text-gray-700');
+                    } else {
+                        // Enter edit mode
+                        editingProfile = true;
+                        editProfileBtn.textContent = translations[currentLang].saveChanges;
+                        editProfileBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                        editProfileBtn.classList.add('bg-indigo-600', 'text-white');
+                    }
+                });
+            }
+            
+            if (saveSettingsBtn) {
+                saveSettingsBtn.addEventListener('click', () => {
+                    // Save settings
+                    alert('Settings saved successfully!');
+                    showView('profile');
+                });
+            }
+            
+            // Customer Support
+            const floatingWhatsApp = document.querySelector('.floating-whatsapp');
+            if (floatingWhatsApp) {
+                floatingWhatsApp.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.open('https://wa.me/2290140892554', '_blank');
+                });
+            }
+            
+            // Support panel toggle
+            if (floatingWhatsApp) {
+                floatingWhatsApp.addEventListener('mouseenter', () => {
+                    if (supportPanel) supportPanel.classList.remove('hidden');
+                });
+            }
+            
+            if (closeSupport) {
+                closeSupport.addEventListener('click', () => {
+                    if (supportPanel) supportPanel.classList.add('hidden');
+                });
+            }
+            
+            document.addEventListener('click', (e) => {
+                if (supportPanel && 
+                    !supportPanel.contains(e.target) && 
+                    floatingWhatsApp && 
+                    !floatingWhatsApp.contains(e.target)) {
+                    supportPanel.classList.add('hidden');
+                }
+            });
+            
+            // Chat functionality
+            if (chatToggle) {
+                chatToggle.addEventListener('click', () => {
+                    if (chatList && chatList.style.display === 'flex') {
+                        chatList.style.display = 'none';
+                    } else {
+                        if (chatList) chatList.style.display = 'flex';
+                        if (chatContainer) chatContainer.style.display = 'none';
+                    }
+                });
+            }
+            
+            if (sendMessageBtn) {
+                sendMessageBtn.addEventListener('click', sendMessage);
+            }
+            if (messageInput) {
+                messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+            
+            // Close chat when clicking outside
+            document.addEventListener('click', (e) => {
+                if (chatContainer && 
+                    chatContainer.style.display === 'flex' && 
+                    !chatContainer.contains(e.target) && 
+                    chatToggle && 
+                    !chatToggle.contains(e.target) && 
+                    chatList && 
+                    !chatList.contains(e.target)) {
+                    chatContainer.style.display = 'none';
+                }
+                
+                if (chatList && 
+                    chatList.style.display === 'flex' && 
+                    !chatList.contains(e.target) && 
+                    chatToggle && 
+                    !chatToggle.contains(e.target)) {
+                    chatList.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
